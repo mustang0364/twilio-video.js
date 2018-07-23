@@ -129,4 +129,43 @@ describe('LocalDataTrack', () => {
       sinon.assert.calledWith(dataTrackSender.send, data);
     });
   });
+
+  describe('Object.keys', () => {
+    let track;
+
+    before(() => {
+      track = new LocalDataTrack();
+    });
+
+    it('only returns public properties', () => {
+      assert.deepEqual(Object.keys(track), [
+        'kind',
+        'name',
+        'maxPacketLifeTime',
+        'maxRetransmits',
+        'ordered',
+        'reliable'
+      ]);
+    });
+  });
+
+  describe('#toJSON', () => {
+    let track;
+
+    before(() => {
+      track = new LocalDataTrack();
+    });
+
+    it('returns only public properties', () => {
+      assert.deepEqual(track.toJSON(), {
+        id: track.id,
+        kind: track.kind,
+        maxPacketLifeTime: track.maxPacketLifeTime,
+        maxRetransmits: track.maxRetransmits,
+        name: track.name,
+        ordered: track.ordered,
+        reliable: track.reliable
+      });
+    });
+  });
 });

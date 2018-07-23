@@ -107,6 +107,66 @@ const { FakeMediaStreamTrack } = require('../../../../lib/fakemediastream');
         });
       });
     });
+
+    describe('Object.keys', () => {
+      let track;
+
+      before(() => {
+        track = makeTrack('foo', kind, true, null, RemoteTrack);
+      });
+
+      it('returns only public properties', () => {
+        if (kind === 'audio') {
+          assert.deepEqual(Object.keys(track), [
+            'kind',
+            'name',
+            'isStarted',
+            'mediaStreamTrack'
+          ]);
+        } else {
+          assert.deepEqual(Object.keys(track), [
+            'kind',
+            'name',
+            'isStarted',
+            'mediaStreamTrack',
+            'dimensions'
+          ]);
+        }
+      });
+    });
+
+    describe('#toJSON', () => {
+      let track;
+
+      before(() => {
+        track = makeTrack('foo', kind, true, null, RemoteTrack);
+      });
+
+      it('returns only public properties', () => {
+        if (kind === 'audio') {
+          assert.deepEqual(track.toJSON(), {
+            id: track.id,
+            isEnabled: track.isEnabled,
+            isStarted: track.isStarted,
+            isSubscribed: track.isSubscribed,
+            kind: track.kind,
+            name: track.name,
+            sid: track.sid
+          });
+        } else {
+          assert.deepEqual(track.toJSON(), {
+            dimensions: track.dimensions,
+            id: track.id,
+            isEnabled: track.isEnabled,
+            isStarted: track.isStarted,
+            isSubscribed: track.isSubscribed,
+            kind: track.kind,
+            name: track.name,
+            sid: track.sid
+          });
+        }
+      });
+    });
   });
 });
 
