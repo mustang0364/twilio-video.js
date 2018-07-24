@@ -1523,6 +1523,55 @@ describe('RemoteParticipant', () => {
       });
     });
   });
+
+  describe('Object.keys', () => {
+    let participant;
+
+    before(() => {
+      participant = new RemoteParticipant(makeSignaling(), { log });
+    });
+
+    it('only returns public properties', () => {
+      assert.deepEqual(Object.keys(participant), [
+        'audioTracks',
+        'audioTrackPublications',
+        'dataTracks',
+        'dataTrackPublications',
+        'identity',
+        'sid',
+        'state',
+        'tracks',
+        'trackPublications',
+        'videoTracks',
+        'videoTrackPublications'
+      ]);
+    });
+  });
+
+  describe('#toJSON', () => {
+    let participant;
+
+    before(() => {
+      participant = new RemoteParticipant(makeSignaling(), { log });
+    });
+
+    it('only returns public properties', () => {
+      assert.deepEqual(participant.toJSON(), {
+        audioTracks: {},
+        audioTrackPublications: {},
+        dataTracks: {},
+        dataTrackPublications: {},
+        identity: participant.identity,
+        networkQualityLevel: participant.networkQualityLevel,
+        sid: participant.sid,
+        state: participant.state,
+        tracks: {},
+        trackPublications: {},
+        videoTracks: {},
+        videoTrackPublications: {}
+      });
+    });
+  });
 });
 
 
@@ -1608,11 +1657,12 @@ function makeTest(options) {
 }
 
 function makeSignaling(options) {
+  options = options || {};
   const signaling = new EventEmitter();
   signaling.sid = options.sid;
   signaling.identity = options.identity;
   signaling.state = options.state;
-  signaling.tracks = options.trackSignalings;
+  signaling.tracks = options.trackSignalings || [];
   return signaling;
 }
 
